@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 streamlit
 pandas
 numpy
@@ -5,3 +6,12 @@ scikit-learn
 joblib
 matplotlib
 seaborn
+=======
+streamlit
+pandas
+numpy
+scikit-learn
+joblib
+matplotlib
+seaborn
+>>>>>>> cd2e02b71cf1346a4c5e99bc4bf8950de0a4523d

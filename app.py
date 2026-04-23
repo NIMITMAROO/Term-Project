@@ -11,7 +11,7 @@ scaler = joblib.load("scaler.joblib")
 feature_columns = joblib.load("feature_columns.joblib")
 
 # ==============================
-# Label Mapping (IMPORTANT)
+# Label Mapping
 # ==============================
 label_map = {
     0: "High",
@@ -29,7 +29,7 @@ st.set_page_config(page_title="Solubility Predictor", layout="wide")
 st.title("💧 Aqueous Solubility Predictor")
 
 st.markdown("""
-This application predicts the aqueous solubility class of a compound based on molecular descriptors.
+This application predicts aqueous solubility based on molecular descriptors.
 
 **Classes:**
 - High Solubility
@@ -44,7 +44,6 @@ st.sidebar.header("Input Molecular Descriptors")
 
 input_data = {}
 
-# Feature ranges (chemically reasonable)
 feature_ranges = {
     "MolWt": (0.0, 1000.0),
     "MolLogP": (-5.0, 10.0),
@@ -66,7 +65,6 @@ for feature in feature_columns:
         float((min_val + max_val) / 2)
     )
 
-# Convert to DataFrame
 input_df = pd.DataFrame([input_data])
 
 # ==============================
@@ -80,22 +78,15 @@ st.write(input_df)
 # ==============================
 if st.button("Predict Solubility"):
 
-    # Scale input
     input_scaled = scaler.transform(input_df)
 
-    # Predict
     prediction = model.predict(input_scaled)
     probs = model.predict_proba(input_scaled)
 
-    # Map prediction to label
     predicted_class = label_map[prediction[0]]
 
-    # ==============================
-    # Output Section
-    # ==============================
     st.subheader("📊 Prediction Result")
 
-    # Color-coded result
     if predicted_class == "High":
         st.success(f"Predicted Class: **{predicted_class} Solubility**")
     elif predicted_class == "Medium":
@@ -103,15 +94,11 @@ if st.button("Predict Solubility"):
     else:
         st.error(f"Predicted Class: **{predicted_class} Solubility**")
 
-    # ==============================
-    # Probability Visualization
-    # ==============================
     st.subheader("📈 Prediction Probabilities")
 
     prob_df = pd.DataFrame(probs, columns=class_names)
 
     st.bar_chart(prob_df.T)
 
-    # Show exact probabilities
     st.write("### Detailed Probabilities")
     st.write(prob_df)
